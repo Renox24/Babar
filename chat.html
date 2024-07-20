@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbox</title>
+    <link rel="stylesheet" href="css/acceuil.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+    <link rel="stylesheet" href="css/chat.css">
+</head> 
+<header>
+  <div class="container2">
+  <nav>
+      <ul>
+          <li class="menu-deroulant2">
+            <a href="acceuil.html" class="realisationshover">Acceuil</a>
+        <li class="menu-deroulant">
+          <a href="#" class="realisationshover">Informations</a>
+          <ul class="sous-menu">
+            <li><a href="hymne.html">Hymne de Babar Land</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="chat.html">Chat</a></li>
+            <li><a href="jeu.html">jeux de mots</a></li>
+            </ul>
+            <li class="menu-deroulant">
+              <a href="#" class="realisationshover">Vidéos</a>
+              <ul class="sous-menu">
+                <li><a href="saison1.html">Première saison</a></li>
+                <li><a href="saison2.html">Deuxième saison</a></li>
+                <li><a href="saison3.html">troisième saison</a></li>
+                <li><a href="hymne.html">Hymne de Babar Land</a></li>
+                </ul>
+        <li class="menu-deroulant">
+          <a href="#" class="serviceshover">Projets</a>
+          <ul class="sous-menu">
+            <li><a href="#">A définir / en cours</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+</header> 
+<body>
+
+  
+
+    <div id="chat-icon" class="chat-icon">
+        <i class="fas fa-comments"></i>
+    </div>
+    <div id="chatbox-container" class="chatbox-container">
+        <div class="chatbox-header">
+            <h3>Chatbox</h3>
+            <span id="close-chatbox" class="close-chatbox">&times;</span>
+        </div>
+        <div id="chatbox" class="chatbox">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="chatbox-input">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script src="js/chat.js"></script>
+
+</body>
+</html>
