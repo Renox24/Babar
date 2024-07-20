@@ -19,27 +19,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
         chatboxContainer.classList.remove('open');
         setTimeout(() => {
             chatboxContainer.style.display = 'none';
-        }, 300);  // Match this to the duration of the animation
+        }, 300);
     });
 
     document.getElementById('message-input').addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
-            handleSendMessage(); // Appel handleSendMessage() lorsque "Enter" est pressé
+            handleSendMessage();
         }
     });
 
-    // Récupérer l'état de canSendMessage depuis le localStorage
     const sendMessageStatus = localStorage.getItem('canSendMessage');
     if (sendMessageStatus !== null) {
         canSendMessage = JSON.parse(sendMessageStatus);
     }
 
-    // Vérifier et prolonger la sanction si nécessaire
     checkAndExtendSanction();
 });
 
 function handleSendMessage() {
-    if (canSendMessage = true) {
+    if (canSendMessage) {
         sendMessage();
     } else {
         alert("Envoi de messages désactivé pour le moment.");
@@ -53,16 +51,21 @@ function sendMessage() {
 
     if (message === '') return;
 
-    // Vérification du spam
-    if (now - lastMessageTime < 10000) { // Si moins de 10 secondes se sont écoulées depuis le dernier message
+    if (message.toLowerCase() === 'clear_chat_robinou') {
+        clearChatbox();
+        messageInput.value = '';
+        return;
+    }
+
+    if (now - lastMessageTime < 10000) {
         messageCountInLastTenSeconds++;
         if (messageCountInLastTenSeconds > 5) {
-            canSendMessage = false; // Désactive l'envoi de messages
-            localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Sauvegarder dans le localStorage
+            canSendMessage = false;
+            localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage));
             setTimeout(() => {
-                canSendMessage = true; // Réactive l'envoi de messages après 5 secondes
-                localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Mettre à jour dans le localStorage
-            }, 5000); // Délai de 5 secondes avant de pouvoir envoyer à nouveau un message
+                canSendMessage = true;
+                localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage));
+            }, 5000);
             alert("Vous avez envoyé trop de messages en peu de temps. Attendez 5 secondes avant d'envoyer un autre message.");
             return;
         }
@@ -71,8 +74,7 @@ function sendMessage() {
         messageCountInLastTenSeconds = 1;
     }
 
-    // Vérification des mots insultants
-    const insultingWords = ['Gredin', 'insulte2', 'insulte3']; // Liste des mots insultants (à remplacer par une liste réelle)
+    const insultingWords = ['Gredin', 'insulte2', 'insulte3'];
     const foundInsult = insultingWords.some(word => message.toLowerCase().includes(word.toLowerCase()));
 
     if (foundInsult) {
@@ -89,12 +91,12 @@ function sendMessage() {
 
 function blockUserForTwoHours(insultingMessage) {
     canSendMessage = false;
-    localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Sauvegarder dans le localStorage
+    localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage));
 
     setTimeout(() => {
         canSendMessage = true;
-        localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Mettre à jour dans le localStorage
-    }, 7200000); // 2 heures en millisecondes
+        localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage));
+    }, 7200000);
 
     alert("Vous avez envoyé un message contenant des mots insultants. Vous ne pourrez plus envoyer de messages pendant 2 heures.");
 }
@@ -134,6 +136,14 @@ function loadMessages() {
     messages.forEach(message => appendMessage(message));
 }
 
+function clearChatbox() {
+    localStorage.removeItem('chatMessages');
+    const chatBox = document.getElementById('chatbox');
+    while (chatBox.firstChild) {
+        chatBox.removeChild(chatBox.firstChild);
+    }
+}
+
 function sendToDiscord(message) {
     const discordWebhookUrl = 'https://discord.com/api/webhooks/1253662106251821076/jPim_rPaIAdMGXWZSKrrgC6wjG0upGFcMdKfCR52F_uBeFd-J1kU85yCUoynnhomgQK8';
 
@@ -153,7 +163,6 @@ function sendToDiscord(message) {
 function fetchDiscordMessages() {
     const discordChannelMessagesUrl = 'https://discord.com/channels/1253017916119715975/1264351445650636850';
 
-    // Fetch messages from your server that stores Discord messages
     fetch(discordChannelMessagesUrl)
         .then(response => response.json())
         .then(messages => {
@@ -166,12 +175,10 @@ function fetchDiscordMessages() {
 }
 
 function getUserIPAddress() {
-    // Fonction fictive pour récupérer l'adresse IP de l'utilisateur
     return '127.0.0.1';
 }
 
 function getUserLocation() {
-    // Fonction fictive pour récupérer la localisation de l'adresse IP de l'utilisateur
     return 'Localisation fictive';
 }
 
@@ -179,7 +186,7 @@ function checkAndExtendSanction() {
     const blockExpiration = localStorage.getItem('blockExpiration');
     if (blockExpiration) {
         const now = new Date().getTime();
-        const extendedExpiration = parseInt(blockExpiration, 10) + 10000; // Ajoute 10 secondes (en millisecondes)
+        const extendedExpiration = parseInt(blockExpiration, 10) + 10000;
 
         if (extendedExpiration > now) {
             const additionalSeconds = Math.ceil((extendedExpiration - now) / 1000);
@@ -188,7 +195,7 @@ function checkAndExtendSanction() {
                 localStorage.removeItem('blockExpiration');
             }, extendedExpiration - now);
             canSendMessage = false;
-            localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Sauvegarder dans le localStorage
+            localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage));
         }
     }
 }
