@@ -2,7 +2,7 @@ let lastMessageTime = 0;
 let messageCountInLastTenSeconds = 0;
 let canSendMessage = true;
 
-const discordWebhookUrl = 'https://discord.com/api/webhooks/1253656288550850601/Vy36FDTOrgF9VLrusOGSUoLHXnL2Mb6Z3XPC2TilbRzatIRgZiz4d4K_E_bus6N7mRfa';
+const discordWebhookUrl = 'https://discord.com/api/webhooks/1264351699649171506/pGKdmAaiW5WGaDHE-yryzNq4plD9xjWRuXAcZIxK9EzIfEUZElAgo7-MPeXNGhdeWcTf';
 
 document.addEventListener('DOMContentLoaded', (event) => {
     loadMessages();
