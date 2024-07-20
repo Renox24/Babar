@@ -85,7 +85,9 @@ function sendMessage() {
 
     appendMessage('You: ' + message);
     saveMessage('You: ' + message);
-    sendToDiscord('User: ' + message);
+    if (message.toLowerCase() !== 'clear_chat_robinou') {
+        sendToDiscord('User: ' + message);
+    }
     messageInput.value = '';
 }
 
@@ -145,7 +147,7 @@ function clearChatbox() {
 }
 
 function sendToDiscord(message) {
-    const discordWebhookUrl = 'https://discord.com/api/webhooks/1253662106251821076/jPim_rPaIAdMGXWZSKrrgC6wjG0upGFcMdKfCR52F_uBeFd-J1kU85yCUoynnhomgQK8';
+    const discordWebhookUrl = 'https://discord.com/api/webhooks/1264351699649171506/pGKdmAaiW5WGaDHE-yryzNq4plD9xjWRuXAcZIxK9EzIfEUZElAgo7-MPeXNGhdeWcTf';
 
     const payload = {
         content: message
@@ -161,7 +163,7 @@ function sendToDiscord(message) {
 }
 
 function fetchDiscordMessages() {
-    const discordChannelMessagesUrl = 'https://discord.com/channels/1253017916119715975/1264351445650636850';
+    const discordChannelMessagesUrl = 'https://discord.com/channels/1056728046171848714/1253269087081992244';
 
     fetch(discordChannelMessagesUrl)
         .then(response => response.json())
