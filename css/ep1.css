@@ -1,0 +1,38 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#video {
+    width: 100%;
+    height: 100%;
+}
+
+@media (min-aspect-ratio: 16/9) {
+    .video-background iframe {
+        width: 100%;
+        height: 100%; /* 16:9 ratio */
+    }
+}
+
+@media (max-aspect-ratio: 16/9) {
+    .video-background iframe {
+        width: 100%; /* 16:9 ratio */
+        height: 100vh;
+    }
+}
