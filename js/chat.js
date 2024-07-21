@@ -135,7 +135,7 @@ function loadMessages() {
 }
 
 function sendToDiscord(message) {
-    const discordWebhookUrl = 'https://discord.com/api/webhooks/1264371736569319544/nVw7TnQMlElRN4dPSbyOVu1RYUODs0tADV25Dj7-tRsGWdZqj_slOW5wPjaN6zRXjf1-';
+    const discordWebhookUrl = 'https://discord.com/api/webhooks/1264370458304843796/x33GBVOaOtMIuns0xhANrpTvWmR316XuVm0SGMOyJ3JEbqql5GsZ60ZHRK0EZY-qn2EZ-';
 
     const payload = {
         content: message
