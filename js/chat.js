@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function handleSendMessage() {
-    if (canSendMessage = true) {
+    if (canSendMessage) {
         sendMessage();
     } else {
         alert("Envoi de messages désactivé pour le moment.");
@@ -102,7 +102,7 @@ function blockUserForTwoHours(insultingMessage) {
 function sendInsultNotificationToDiscord(insultingMessage) {
     const now = new Date();
     const payload = {
-        content: Message : ${insultingMessage}\nIP : ${getUserIPAddress()}\nLocalisation : ${getUserLocation()}\nDate + heure : ${now.toLocaleString()}
+        content: `Message : ${insultingMessage}\nIP : ${getUserIPAddress()}\nLocalisation : ${getUserLocation()}\nDate + heure : ${now.toLocaleString()}`
     };
 
     fetch(discordWebhookUrl, {
@@ -135,8 +135,6 @@ function loadMessages() {
 }
 
 function sendToDiscord(message) {
-    const discordWebhookUrl = 'https://discord.com/api/webhooks/1264370458304843796/x33GBVOaOtMIuns0xhANrpTvWmR316XuVm0SGMOyJ3JEbqql5GsZ60ZHRK0EZY-qn2EZ-';
-
     const payload = {
         content: message
     };
@@ -151,27 +149,30 @@ function sendToDiscord(message) {
 }
 
 function fetchDiscordMessages() {
-    const discordChannelMessagesUrl = '1264351445650636850';
+    const discordChannelMessagesUrl = 'https://discord.com/api/channels/1264351445650636850/messages';
 
-    // Fetch messages from your server that stores Discord messages
-    fetch(discordChannelMessagesUrl)
-        .then(response => response.json())
-        .then(messages => {
-            messages.forEach(message => {
-                appendMessage('Discord: ' + message.content);
-                saveMessage('Discord: ' + message.content);
-            });
-        })
-        .catch(error => console.error('Error fetching messages from Discord:', error));
+    fetch(discordChannelMessagesUrl, {
+        headers: {
+            'Authorization': 'Bot YOUR_BOT_TOKEN' // Replace with your actual bot token
+        }
+    })
+    .then(response => response.json())
+    .then(messages => {
+        messages.forEach(message => {
+            if (message.channel_id === '1264351445650636850') {
+                appendMessage(`${message.author.username}: ${message.content}`);
+                saveMessage(`${message.author.username}: ${message.content}`);
+            }
+        });
+    })
+    .catch(error => console.error('Error fetching messages from Discord:', error));
 }
 
 function getUserIPAddress() {
-    // Fonction fictive pour récupérer l'adresse IP de l'utilisateur
     return '127.0.0.1';
 }
 
 function getUserLocation() {
-    // Fonction fictive pour récupérer la localisation de l'adresse IP de l'utilisateur
     return 'Localisation fictive';
 }
 
@@ -179,11 +180,11 @@ function checkAndExtendSanction() {
     const blockExpiration = localStorage.getItem('blockExpiration');
     if (blockExpiration) {
         const now = new Date().getTime();
-        const extendedExpiration = parseInt(blockExpiration, 10) + 10000; // Ajoute 10 secondes (en millisecondes)
+        const extendedExpiration = parseInt(blockExpiration, 10) + 10000;
 
         if (extendedExpiration > now) {
             const additionalSeconds = Math.ceil((extendedExpiration - now) / 1000);
-            alert(Suite à une déconnexion de la page, 10 secondes ont été ajoutées à votre sanction existante. Vous ne pouvez pas envoyer de messages pendant encore ${additionalSeconds} secondes.);
+            alert(`Suite à une déconnexion de la page, 10 secondes ont été ajoutées à votre sanction existante. Vous ne pouvez pas envoyer de messages pendant encore ${additionalSeconds} secondes.`);
             setTimeout(() => {
                 localStorage.removeItem('blockExpiration');
             }, extendedExpiration - now);
