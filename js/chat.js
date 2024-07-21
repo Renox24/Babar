@@ -151,7 +151,7 @@ function sendToDiscord(message) {
 }
 
 function fetchDiscordMessages() {
-    const discordChannelMessagesUrl = 'https://discord.com/channels/1253017916119715975/1264351445650636850';
+    const discordChannelMessagesUrl = '1264351445650636850';
 
     // Fetch messages from your server that stores Discord messages
     fetch(discordChannelMessagesUrl)
