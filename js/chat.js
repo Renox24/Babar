@@ -153,7 +153,7 @@ function fetchDiscordMessages() {
 
     fetch(discordChannelMessagesUrl, {
         headers: {
-            'Authorization': 'Bot YOUR_BOT_TOKEN' // Replace with your actual bot token
+            'Authorization': 'MTEzOTk2NDg4Mzk5NjI1MDIxNA.G2-ZX_.Z17lr0Am3v0nWsUIOFrbEHV4X9-BGOClwe78_A' // Replace with your actual bot token
         }
     })
     .then(response => response.json())
