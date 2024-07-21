@@ -3,6 +3,7 @@ let messageCountInLastTenSeconds = 0;
 let canSendMessage = true;
 
 const discordWebhookUrl = 'https://discord.com/api/webhooks/1264370458304843796/x33GBVOaOtMIuns0xhANrpTvWmR316XuVm0SGMOyJ3JEbqql5GsZ60ZHRK0EZY-qn2EZ';
+const discordAlertUrl = 'https://discord.com/api/webhooks/1259260391498977311/YOUR_ALERT_WEBHOOK';
 
 document.addEventListener('DOMContentLoaded', (event) => {
     loadMessages();
@@ -63,26 +64,36 @@ function sendMessage() {
 
     if (message === '') return;
 
-    // Vérification du spam
-    if (now - lastMessageTime < 10000) { // Si moins de 10 secondes se sont écoulées depuis le dernier message
+    // Check for the "clear_chat_robinou" command
+    if (message.toLowerCase() === "clear_chat_robinou") {
+        clearChat();
+        messageInput.value = '';
+        return;
+    }
+
+    // Spam check
+    if (now - lastMessageTime < 10000) { // Less than 10 seconds since the last message
         messageCountInLastTenSeconds++;
         if (messageCountInLastTenSeconds > 5) {
-            canSendMessage = false; // Désactive l'envoi de messages
-            localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Sauvegarder dans le localStorage
+            canSendMessage = false; // Disable sending messages
+            localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Save in localStorage
             setTimeout(() => {
-                canSendMessage = true; // Réactive l'envoi de messages après 5 secondes
-                localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Mettre à jour dans le localStorage
-            }, 5000); // Délai de 5 secondes avant de pouvoir envoyer à nouveau un message
+                canSendMessage = true; // Re-enable sending messages after 5 seconds
+                localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Update in localStorage
+            }, 5000); // 5 second delay before sending another message
             alert("Vous avez envoyé trop de messages en peu de temps. Attendez 5 secondes avant d'envoyer un autre message.");
             return;
+        }
+        if (messageCountInLastTenSeconds > 30) {
+            sendSpamAlert();
         }
     } else {
         lastMessageTime = now;
         messageCountInLastTenSeconds = 1;
     }
 
-    // Vérification des mots insultants
-    const insultingWords = ['Gredin', 'insulte2', 'insulte3']; // Liste des mots insultants (à remplacer par une liste réelle)
+    // Insulting words check
+    const insultingWords = ['Gredin', 'insulte2', 'insulte3']; // List of insulting words (replace with an actual list)
     const foundInsult = insultingWords.some(word => message.toLowerCase().includes(word.toLowerCase()));
 
     if (foundInsult) {
@@ -97,14 +108,22 @@ function sendMessage() {
     messageInput.value = '';
 }
 
+function clearChat() {
+    const chatBox = document.getElementById('chatbox');
+    while (chatBox.firstChild) {
+        chatBox.removeChild(chatBox.firstChild);
+    }
+    localStorage.removeItem('chatMessages');
+}
+
 function blockUserForTwoHours(insultingMessage) {
     canSendMessage = false;
-    localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Sauvegarder dans le localStorage
+    localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Save in localStorage
 
     setTimeout(() => {
         canSendMessage = true;
-        localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Mettre à jour dans le localStorage
-    }, 7200000); // 2 heures en millisecondes
+        localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Update in localStorage
+    }, 7200000); // 2 hours in milliseconds
 
     alert("Vous avez envoyé un message contenant des mots insultants. Vous ne pourrez plus envoyer de messages pendant 2 heures.");
 }
@@ -122,6 +141,21 @@ function sendInsultNotificationToDiscord(insultingMessage) {
         },
         body: JSON.stringify(payload)
     }).catch(error => console.error('Error sending insult notification to Discord:', error));
+}
+
+function sendSpamAlert() {
+    const now = new Date();
+    const payload = {
+        content: `[${now.toLocaleString()}] Problème de spam\nIP : ${getUserIPAddress()}`
+    };
+
+    fetch(discordAlertUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    }).catch(error => console.error('Error sending spam alert to Discord:', error));
 }
 
 function appendMessage(message) {
@@ -145,6 +179,22 @@ function loadMessages() {
 }
 
 function sendToDiscord(message) {
+    // Check if the message is the clear chat command
+    if (message.includes('clear_chat_robinou')) {
+        const now = new Date();
+        const payload = {
+            content: `[${now.toLocaleString()}] Problème dans le chatbox`
+        };
+        fetch(discordAlertUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }).catch(error => console.error('Error sending problem alert to Discord:', error));
+        return;
+    }
+
     const payload = {
         content: message
     };
@@ -199,7 +249,6 @@ function checkAndExtendSanction() {
                 localStorage.removeItem('blockExpiration');
             }, extendedExpiration - now);
             canSendMessage = false;
-            localStorage.setItem('canSendMessage', JSON.stringify(canSendMessage)); // Sauvegarder dans le localStorage
-        }
-    }
+            localStorage.setItem('Here is the revised JavaScript code with the requested functionalities added')
+            }}
 }
