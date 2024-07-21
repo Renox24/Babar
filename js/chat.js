@@ -9,24 +9,44 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetchDiscordMessages();
 
     document.getElementById('chat-icon').addEventListener('click', () => {
+        console.log('Chat icon clicked'); // Debug log
         const chatboxContainer = document.getElementById('chatbox-container');
-        chatboxContainer.classList.add('open');
-        chatboxContainer.style.display = 'flex';
+        if (chatboxContainer) {
+            chatboxContainer.classList.add('open');
+            chatboxContainer.style.display = 'flex';
+        } else {
+            console.error('Chatbox container not found');
+        }
     });
 
     document.getElementById('close-chatbox').addEventListener('click', () => {
+        console.log('Close chatbox clicked'); // Debug log
         const chatboxContainer = document.getElementById('chatbox-container');
-        chatboxContainer.classList.remove('open');
-        setTimeout(() => {
-            chatboxContainer.style.display = 'none';
-        }, 300);  // Match this to the duration of the animation
+        if (chatboxContainer) {
+            chatboxContainer.classList.remove('open');
+            setTimeout(() => {
+                chatboxContainer.style.display = 'none';
+            }, 300);  // Match this to the duration of the animation
+        } else {
+            console.error('Chatbox container not found');
+        }
     });
 
     document.getElementById('message-input').addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
-            handleSendMessage(); // Appel handleSendMessage() lorsque "Enter" est pressé
+            handleSendMessage(); // Call handleSendMessage() when "Enter" is pressed
         }
     });
+
+    // Retrieve the state of canSendMessage from localStorage
+    const sendMessageStatus = localStorage.getItem('canSendMessage');
+    if (sendMessageStatus !== null) {
+        canSendMessage = JSON.parse(sendMessageStatus);
+    }
+
+    // Check and extend the sanction if necessary
+    checkAndExtendSanction();
+});
 
     // Récupérer l'état de canSendMessage depuis le localStorage
     const sendMessageStatus = localStorage.getItem('canSendMessage');
@@ -153,7 +173,7 @@ function fetchDiscordMessages() {
 
     fetch(discordChannelMessagesUrl, {
         headers: {
-            'Authorization': 'MTEzOTk2NDg4Mzk5NjI1MDIxNA.G2-ZX_.Z17lr0Am3v0nWsUIOFrbEHV4X9-BGOClwe78_A' // Replace with your actual bot token
+            'Authorization': 'https://discord.com/api/webhooks/1264370458304843796/x33GBVOaOtMIuns0xhANrpTvWmR316XuVm0SGMOyJ3JEbqql5GsZ60ZHRK0EZY-qn2EZ' // Replace with your actual bot token
         }
     })
     .then(response => response.json())
