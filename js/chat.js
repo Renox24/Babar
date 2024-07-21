@@ -48,16 +48,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     checkAndExtendSanction();
 });
 
-    // Récupérer l'état de canSendMessage depuis le localStorage
-    const sendMessageStatus = localStorage.getItem('canSendMessage');
-    if (sendMessageStatus !== null) {
-        canSendMessage = JSON.parse(sendMessageStatus);
-    }
-
-    // Vérifier et prolonger la sanction si nécessaire
-    checkAndExtendSanction();
-});
-
 function handleSendMessage() {
     if (canSendMessage) {
         sendMessage();
@@ -173,7 +163,7 @@ function fetchDiscordMessages() {
 
     fetch(discordChannelMessagesUrl, {
         headers: {
-            'Authorization': 'https://discord.com/api/webhooks/1264370458304843796/x33GBVOaOtMIuns0xhANrpTvWmR316XuVm0SGMOyJ3JEbqql5GsZ60ZHRK0EZY-qn2EZ' // Replace with your actual bot token
+            'Authorization': 'YOUR_BOT_TOKEN' // Replace with your actual bot token
         }
     })
     .then(response => response.json())
